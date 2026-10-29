@@ -1,8 +1,31 @@
 <script setup>
 import { ref } from 'vue'
 
-// 第 1 轮：只搭骨架，输入区 + 卡片预览占位
 const text = ref('')
+const loading = ref(false)
+const analysis = ref(null)
+const error = ref('')
+
+async function generate() {
+  if (!text.value.trim()) return
+  loading.value = true
+  error.value = ''
+  analysis.value = null
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text.value }),
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || '分析失败')
+    analysis.value = data.analysis
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 
 <template>
@@ -20,13 +43,20 @@ const text = ref('')
 
       <div class="toolbar">
         <span class="count">{{ text.length }} 字</span>
-        <button class="generate-btn">生成卡片</button>
+        <button class="generate-btn" :disabled="loading" @click="generate">
+          {{ loading ? '分析中…' : '生成卡片' }}
+        </button>
       </div>
     </section>
 
-    <!-- 右侧：卡片预览区 -->
+    <!-- 右侧：卡片预览区（第 2 轮先显示 JSON，第 3 轮换成卡片） -->
     <section class="preview-panel">
-      <div class="preview-placeholder">
+      <div v-if="loading" class="preview-msg">正在分析文字的情绪与意境…</div>
+      <div v-else-if="error" class="preview-msg error">{{ error }}</div>
+      <div v-else-if="analysis" class="preview-json">
+        <pre>{{ JSON.stringify(analysis, null, 2) }}</pre>
+      </div>
+      <div v-else class="preview-placeholder">
         <span class="ph-icon">◻</span>
         <span class="ph-text">卡片预览区</span>
       </div>
