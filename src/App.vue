@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import EmotionCard from './components/EmotionCard.vue'
 
 const text = ref('')
 const loading = ref(false)
@@ -53,8 +54,8 @@ async function generate() {
     <section class="preview-panel">
       <div v-if="loading" class="preview-msg">正在分析文字的情绪与意境…</div>
       <div v-else-if="error" class="preview-msg error">{{ error }}</div>
-      <div v-else-if="analysis" class="preview-json">
-        <pre>{{ JSON.stringify(analysis, null, 2) }}</pre>
+      <div v-else-if="analysis" class="preview-card">
+        <EmotionCard :text="text" :analysis="analysis" />
       </div>
       <div v-else class="preview-placeholder">
         <span class="ph-icon">◻</span>
@@ -149,6 +150,14 @@ async function generate() {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.preview-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  overflow: auto;
 }
 
 .preview-placeholder {

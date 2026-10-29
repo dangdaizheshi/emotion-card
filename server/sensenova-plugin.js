@@ -76,7 +76,7 @@ export function sensenovaPlugin() {
                   { role: 'system', content: SYSTEM_PROMPT },
                   { role: 'user', content: text },
                 ],
-                temperature: 0.6,
+                temperature: 0.3,
               }),
             })
             const rawText = await r.text()
