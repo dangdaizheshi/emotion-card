@@ -1,0 +1,30 @@
+/* 全局基础样式 —— 第 1 轮：骨架阶段，先定紫色系基调 */
+:root {
+  --bg-deep: #0d0d12;
+  --bg-purple-1: #2a1b4a;
+  --bg-purple-2: #4a1e6e;
+  --bg-purple-3: #7b2d8e;
+  --ink: #e8e8f0;
+  --ink-dim: rgba(232, 232, 240, 0.55);
+  --accent: #b388ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 30% 20%, var(--bg-purple-3) 0%, var(--bg-purple-2) 35%, var(--bg-purple-1) 65%, var(--bg-deep) 100%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
